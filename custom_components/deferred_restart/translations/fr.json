@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Deferred Restart",
+        "data": {
+          "minutes_before": "Minutes protégées avant un déclenchement",
+          "minutes_after": "Minutes protégées après un déclenchement",
+          "max_defer_minutes": "Report maximum en minutes (0 = illimité)",
+          "min_pattern_interval": "Ignorer les time_pattern plus fréquents que (minutes)",
+          "block_on_any_running": "Bloquer aussi pour toute automatisation/script en cours",
+          "excluded_automations": "Automatisations ignorées",
+          "pause_minutes": "Durée de pause de la protection (minutes)"
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Déjà configuré."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Deferred Restart",
+        "data": {
+          "minutes_before": "Minutes protégées avant un déclenchement",
+          "minutes_after": "Minutes protégées après un déclenchement",
+          "max_defer_minutes": "Report maximum en minutes (0 = illimité)",
+          "min_pattern_interval": "Ignorer les time_pattern plus fréquents que (minutes)",
+          "block_on_any_running": "Bloquer aussi pour toute automatisation/script en cours",
+          "excluded_automations": "Automatisations ignorées",
+          "pause_minutes": "Durée de pause de la protection (minutes)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "safe_now": {
+        "name": "Sûr maintenant"
+      },
+      "pending": {
+        "name": "En attente"
+      }
+    },
+    "sensor": {
+      "next_scheduled_trigger": {
+        "name": "Prochain déclenchement prévu"
+      }
+    },
+    "switch": {
+      "protection": {
+        "name": "Protection"
+      }
+    }
+  },
+  "services": {
+    "force_restart": {
+      "name": "Forcer le redémarrage",
+      "description": "Exécute le redémarrage en attente, ou redémarre immédiatement sans contrôle."
+    },
+    "cancel_pending": {
+      "name": "Annuler le redémarrage en attente",
+      "description": "Abandonne le redémarrage différé."
+    }
+  }
+}

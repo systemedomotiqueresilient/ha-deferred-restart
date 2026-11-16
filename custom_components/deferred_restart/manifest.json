@@ -1,0 +1,23 @@
+{
+  "domain": "deferred_restart",
+  "name": "Deferred Restart",
+  "after_dependencies": [
+    "calendar",
+    "input_datetime",
+    "script"
+  ],
+  "codeowners": [
+    "@systemedomotiqueresilient"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "automation"
+  ],
+  "documentation": "https://github.com/systemedomotiqueresilient/ha-deferred-restart",
+  "integration_type": "service",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/systemedomotiqueresilient/ha-deferred-restart/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.2.0"
+}

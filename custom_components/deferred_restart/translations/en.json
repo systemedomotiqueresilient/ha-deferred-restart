@@ -1,0 +1,67 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Deferred Restart",
+        "data": {
+          "minutes_before": "Protected minutes before a trigger",
+          "minutes_after": "Protected minutes after a trigger",
+          "max_defer_minutes": "Maximum deferral in minutes (0 = unlimited)",
+          "min_pattern_interval": "Ignore time_pattern triggers more frequent than (minutes)",
+          "block_on_any_running": "Also block for any running automation/script",
+          "excluded_automations": "Ignored automations",
+          "pause_minutes": "Protection pause duration (minutes)"
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Deferred Restart",
+        "data": {
+          "minutes_before": "Protected minutes before a trigger",
+          "minutes_after": "Protected minutes after a trigger",
+          "max_defer_minutes": "Maximum deferral in minutes (0 = unlimited)",
+          "min_pattern_interval": "Ignore time_pattern triggers more frequent than (minutes)",
+          "block_on_any_running": "Also block for any running automation/script",
+          "excluded_automations": "Ignored automations",
+          "pause_minutes": "Protection pause duration (minutes)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "safe_now": {
+        "name": "Safe now"
+      },
+      "pending": {
+        "name": "Pending"
+      }
+    },
+    "sensor": {
+      "next_scheduled_trigger": {
+        "name": "Next scheduled trigger"
+      }
+    },
+    "switch": {
+      "protection": {
+        "name": "Protection"
+      }
+    }
+  },
+  "services": {
+    "force_restart": {
+      "name": "Force restart",
+      "description": "Run the pending restart, or restart now without checks."
+    },
+    "cancel_pending": {
+      "name": "Cancel pending restart",
+      "description": "Drop the deferred restart."
+    }
+  }
+}
