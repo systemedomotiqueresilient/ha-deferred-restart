@@ -6,6 +6,9 @@
     "input_datetime",
     "script"
   ],
+  "categories": [
+    "computers_network"
+  ],
   "codeowners": [
     "@systemedomotiqueresilient"
   ],
