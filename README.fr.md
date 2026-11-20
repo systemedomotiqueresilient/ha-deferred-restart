@@ -6,6 +6,8 @@
 
 🇬🇧 [English](README.md) · 🇫🇷 Français
 
+**Version 0.3.0** · [Journal des modifications](CHANGELOG.md) · [Feuille de route](ROADMAP.md)
+
 Intégration Home Assistant qui **diffère** un redémarrage volontaire lorsqu'il risquerait
 d'empêcher un déclenchement programmé ou prévisible. Le redémarrage n'est pas refusé :
 il est mis en attente et s'exécute automatiquement dès que la fenêtre se libère.
@@ -57,10 +59,30 @@ donc volontairement ignorés.
 - `binary_sensor.deferred_restart_safe_now` : `on` si un redémarrage maintenant ne gêne rien (attribut `reasons`)
 - `binary_sensor.deferred_restart_pending` : redémarrage en attente (`pending_since`, `deadline`)
 - `sensor.deferred_restart_next_scheduled_trigger` : prochain déclenchement prévu sur 24 h
+- `sensor.deferred_restart_admin_phone` : téléphone admin (cible des notifications), diagnostic
 - `switch.deferred_restart_protection` : coupé = protection en pause (mode développement).
   Elle se réactive automatiquement après la durée de pause (120 min par défaut, attribut `resume_at`).
   La pause survit aux redémarrages : on peut enchaîner les cycles modification → redémarrage → test
   sans la réactiver. Couper l'interrupteur libère aussi un redémarrage déjà en attente.
+
+## Téléphone admin
+
+Deferred Restart peut envoyer ses alertes sur le téléphone de l'administrateur : redémarrage
+différé, forcé au délai maximum, ou en échec.
+
+- **À l'installation**, le champ est prérempli si une autre intégration SDR (Sentinel Report,
+  Entity Inventory, Partition Map, Package Keeper) connaît déjà le téléphone admin. Si elles ne
+  sont pas d'accord, une liste de choix est proposée ; s'il n'y en a aucune, ce sont les services
+  `notify.mobile_app_*` et les entités notify de l'application mobile. Laisser vide = pas d'alerte
+  sur le téléphone.
+- **La valeur est copiée** dans cette intégration : supprimer l'autre intégration ne change rien.
+- **Pour la modifier** : Paramètres → Appareils et services → Deferred Restart → Configurer.
+- **`sensor.deferred_restart_admin_phone`** (diagnostic) affiche la cible, pour que les autres
+  intégrations SDR puissent la proposer à leur tour. Rien n'est jamais écrit dans une autre intégration.
+- Un échec d'envoi n'empêche jamais un redémarrage.
+
+Le code commun est dans `admin_phone.py`, copié sans modification depuis le module de
+référence SDR (version 1.1.0), commun à toutes les intégrations SDR.
 
 ## Actions
 

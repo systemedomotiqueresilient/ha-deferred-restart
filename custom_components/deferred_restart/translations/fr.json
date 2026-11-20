@@ -4,6 +4,7 @@
       "user": {
         "title": "Deferred Restart",
         "data": {
+          "admin_notify_target": "Téléphone admin (cible des notifications)",
           "minutes_before": "Minutes protégées avant un déclenchement",
           "minutes_after": "Minutes protégées après un déclenchement",
           "max_defer_minutes": "Report maximum en minutes (0 = illimité)",
@@ -11,11 +12,17 @@
           "block_on_any_running": "Bloquer aussi pour toute automatisation/script en cours",
           "excluded_automations": "Automatisations ignorées",
           "pause_minutes": "Durée de pause de la protection (minutes)"
+        },
+        "data_description": {
+          "admin_notify_target": "Destination des alertes : un service notify (notify.mobile_app_…) ou une entité notify. Prérempli depuis vos autres intégrations SDR si elles en ont déjà un. Laisser vide pour aucun."
         }
       }
     },
     "abort": {
       "single_instance_allowed": "Déjà configuré."
+    },
+    "error": {
+      "invalid_target": "Cible attendue du type notify.mobile_app_mon_telephone."
     }
   },
   "options": {
@@ -23,6 +30,7 @@
       "init": {
         "title": "Deferred Restart",
         "data": {
+          "admin_notify_target": "Téléphone admin (cible des notifications)",
           "minutes_before": "Minutes protégées avant un déclenchement",
           "minutes_after": "Minutes protégées après un déclenchement",
           "max_defer_minutes": "Report maximum en minutes (0 = illimité)",
@@ -30,8 +38,14 @@
           "block_on_any_running": "Bloquer aussi pour toute automatisation/script en cours",
           "excluded_automations": "Automatisations ignorées",
           "pause_minutes": "Durée de pause de la protection (minutes)"
+        },
+        "data_description": {
+          "admin_notify_target": "Destination des alertes : un service notify (notify.mobile_app_…) ou une entité notify. Prérempli depuis vos autres intégrations SDR si elles en ont déjà un. Laisser vide pour aucun."
         }
       }
+    },
+    "error": {
+      "invalid_target": "Cible attendue du type notify.mobile_app_mon_telephone."
     }
   },
   "entity": {
@@ -46,6 +60,9 @@
     "sensor": {
       "next_scheduled_trigger": {
         "name": "Prochain déclenchement prévu"
+      },
+      "admin_notify_target": {
+        "name": "Téléphone admin"
       }
     },
     "switch": {

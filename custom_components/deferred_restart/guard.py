@@ -14,6 +14,7 @@ from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.util import dt as dt_util
 
+from .admin_phone import CONF_ADMIN_NOTIFY_TARGET, async_notify_admin
 from .const import (
     CONF_AFTER,
     CONF_ANY_RUNNING,
@@ -93,7 +94,7 @@ class DeferredRestart:
     # --------------------------------------------------------------- lifecycle
 
     async def async_start(self) -> None:
-        original = self.hass.services._services.get(HA_DOMAIN, {}).get(SERVICE_RESTART)  # noqa: SLF001
+        original = self.hass.services._services.get(HA_DOMAIN, {}).get(SERVICE_RESTART)
         if original is None:
             raise HomeAssistantError("Service homeassistant.restart introuvable")
         self._original = original
@@ -112,19 +113,22 @@ class DeferredRestart:
         if self._unsub_interval:
             self._unsub_interval()
         self._active = False
-        current = self.hass.services._services.get(HA_DOMAIN, {}).get(SERVICE_RESTART)  # noqa: SLF001
-        if self._original is not None and current is not None:
-            if current.job.target == self._async_handle_restart:
-                # Nous sommes au sommet de la chaîne : on restaure le handler précédent
-                # (core avec sa vérification admin, ou Spook s'il était chargé avant).
-                self.hass.services.async_register(
-                    HA_DOMAIN,
-                    SERVICE_RESTART,
-                    self._original.job.target,
-                    schema=self._original.schema,
-                )
-            # Sinon un autre composant (ex : Spook chargé après nous) nous enveloppe :
-            # on reste dans la chaîne en simple relais (_active = False) pour ne pas l'écraser.
+        current = self.hass.services._services.get(HA_DOMAIN, {}).get(SERVICE_RESTART)
+        # Si nous sommes au sommet de la chaîne, on restaure le handler précédent
+        # (core avec sa vérification admin, ou Spook s'il était chargé avant).
+        # Sinon un autre composant (ex : Spook chargé après nous) nous enveloppe :
+        # on reste dans la chaîne en simple relais (_active = False) pour ne pas l'écraser.
+        if (
+            self._original is not None
+            and current is not None
+            and current.job.target == self._async_handle_restart
+        ):
+            self.hass.services.async_register(
+                HA_DOMAIN,
+                SERVICE_RESTART,
+                self._original.job.target,
+                schema=self._original.schema,
+            )
         self.hass.services.async_remove(DOMAIN, SERVICE_FORCE_RESTART)
         self.hass.services.async_remove(DOMAIN, SERVICE_CANCEL_PENDING)
         persistent_notification.async_dismiss(self.hass, NOTIFICATION_ID)
@@ -187,6 +191,14 @@ class DeferredRestart:
             await self._async_run_pending()
         elif self.deadline and dt_util.utcnow() >= self.deadline:
             _LOGGER.warning("Délai max de report atteint, redémarrage forcé : %s", self.reasons)
+            # Envoyé (et attendu) AVANT le redémarrage, sinon il serait perdu.
+            await self._async_notify_admin(
+                self._t(
+                    "Délai maximum de report atteint : redémarrage forcé malgré : ",
+                    "Maximum deferral reached: forcing restart despite: ",
+                )
+                + " ; ".join(self.reasons)
+            )
             await self._async_run_pending()
 
     # ----------------------------------------------------------------- services
@@ -215,10 +227,21 @@ class DeferredRestart:
             await self._async_call_original(call)
             return
 
-        if self.pending_call is None:
+        first_request = self.pending_call is None
+        if first_request:
             self.pending_since = dt_util.utcnow()
         self.pending_call = call  # la dernière demande gagne (ex : safe_mode)
         self._notify_pending()
+        if first_request:
+            # Téléphone admin : une seule notification par report, en tâche de fond
+            # pour ne pas retarder la réponse au service.
+            self.hass.async_create_task(
+                self._async_notify_admin(
+                    self._t("Redémarrage différé : ", "Restart deferred: ")
+                    + " ; ".join(self.reasons)
+                ),
+                eager_start=False,
+            )
         async_dispatcher_send(self.hass, SIGNAL_UPDATE)
 
         # Demande humaine (UI ou réparation HACS) : on remonte un message visible.
@@ -280,6 +303,29 @@ class DeferredRestart:
                 title="Deferred Restart",
                 notification_id=NOTIFICATION_ID,
             )
+            await self._async_notify_admin(
+                self._t("Le redémarrage différé a échoué : ", "Deferred restart failed: ")
+                + str(err)
+            )
+
+    # ------------------------------------------------------------- téléphone admin
+
+    def _t(self, fr: str, en: str) -> str:
+        """Texte des notifications téléphone, selon la langue du serveur."""
+        return fr if (self.hass.config.language or "").startswith("fr") else en
+
+    async def _async_notify_admin(self, message: str) -> bool:
+        """Envoie au téléphone admin ; sans cible, ne fait rien (False).
+
+        async_notify_admin ne lève jamais d'exception : un échec d'envoi
+        n'empêche jamais un redémarrage.
+        """
+        return await async_notify_admin(
+            self.hass,
+            self.entry.data.get(CONF_ADMIN_NOTIFY_TARGET),
+            "Deferred Restart",
+            message,
+        )
 
     @callback
     def _clear_pending(self) -> None:
