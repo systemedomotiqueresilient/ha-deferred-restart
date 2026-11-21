@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import timedelta
 
 DOMAIN = "deferred_restart"
-VERSION = "0.3.0"  # à garder identique à manifest.json et au fichier VERSION
+VERSION = "0.3.1"  # à garder identique à manifest.json et au fichier VERSION
 
 CONF_BEFORE = "minutes_before"
 CONF_AFTER = "minutes_after"

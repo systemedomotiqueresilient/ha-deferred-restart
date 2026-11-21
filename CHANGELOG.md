@@ -2,7 +2,12 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), versions selon [SemVer](https://semver.org/lang/fr/).
 
-## [0.3.0] - 2026-11-20
+## [0.3.1] - 2026-11-21
+
+### Modifié
+- Module `admin_phone.py` passé en **MODULE_VERSION 1.2.0**, copié tel quel depuis `ha-sdr` (commit `77a8992`), SHA-256 `1d720150ff1c709547018236afcb1c555e630c504be0c34b20fe0b79ed80545b`, vérifié par un test. Seul changement : `outdoor_brief` ajouté aux intégrations sœurs, ce qui permet de proposer le téléphone admin choisi dans Outdoor Brief. Aucune fonction ni signature modifiée.
+
+## [0.3.0] - 2026-11-21
 
 ### Ajouté
 - **Téléphone admin** (convention commune SDR, spec v0.2) :

@@ -6,7 +6,7 @@
 
 🇬🇧 English · 🇫🇷 [Français](README.fr.md)
 
-**Version 0.3.0** · [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md)
+**Version 0.3.1** · [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md)
 
 A Home Assistant integration that **defers** a voluntary restart when it would prevent a
 scheduled or predictable automation from running. The restart is not refused: it is queued
@@ -81,7 +81,7 @@ forced after the maximum deferral time, or failed.
 - A failed notification never prevents a restart.
 
 The shared code lives in `admin_phone.py`, copied unchanged from the SDR reference
-module (version 1.1.0), shared by all SDR integrations.
+module (version 1.2.0), shared by all SDR integrations.
 
 ## Actions
 

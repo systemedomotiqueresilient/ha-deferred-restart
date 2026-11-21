@@ -6,7 +6,7 @@
 
 🇬🇧 [English](README.md) · 🇫🇷 Français
 
-**Version 0.3.0** · [Journal des modifications](CHANGELOG.md) · [Feuille de route](ROADMAP.md)
+**Version 0.3.1** · [Journal des modifications](CHANGELOG.md) · [Feuille de route](ROADMAP.md)
 
 Intégration Home Assistant qui **diffère** un redémarrage volontaire lorsqu'il risquerait
 d'empêcher un déclenchement programmé ou prévisible. Le redémarrage n'est pas refusé :
@@ -82,7 +82,7 @@ différé, forcé au délai maximum, ou en échec.
 - Un échec d'envoi n'empêche jamais un redémarrage.
 
 Le code commun est dans `admin_phone.py`, copié sans modification depuis le module de
-référence SDR (version 1.1.0), commun à toutes les intégrations SDR.
+référence SDR (version 1.2.0), commun à toutes les intégrations SDR.
 
 ## Actions
 

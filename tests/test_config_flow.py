@@ -144,3 +144,12 @@ async def test_options_flow_invalid_target(
     )
     assert result["errors"] == {CONF_ADMIN_NOTIFY_TARGET: "invalid_target"}
     assert entry.data[CONF_ADMIN_NOTIFY_TARGET] is None
+
+
+async def test_outdoor_brief_is_a_sibling(
+    hass: HomeAssistant, restart_calls: list[ServiceCall], notify_calls: list[ServiceCall]
+) -> None:
+    """admin_phone 1.2.0 : le téléphone choisi dans Outdoor Brief est proposé."""
+    add_sibling_target(hass, "outdoor_brief", "notify.mobile_app_outdoor")
+    result = await _start(hass)
+    assert _target_field(result)[0] == "notify.mobile_app_outdoor"
