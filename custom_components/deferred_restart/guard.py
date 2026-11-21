@@ -193,11 +193,13 @@ class DeferredRestart:
             _LOGGER.warning("Délai max de report atteint, redémarrage forcé : %s", self.reasons)
             # Envoyé (et attendu) AVANT le redémarrage, sinon il serait perdu.
             await self._async_notify_admin(
+                self._t("⚠️ Redémarrage forcé", "⚠️ Restart forced"),
                 self._t(
                     "Délai maximum de report atteint : redémarrage forcé malgré : ",
                     "Maximum deferral reached: forcing restart despite: ",
                 )
-                + " ; ".join(self.reasons)
+                + " ; ".join(self.reasons),
+                "mdi:restart-alert",
             )
             await self._async_run_pending()
 
@@ -237,8 +239,10 @@ class DeferredRestart:
             # pour ne pas retarder la réponse au service.
             self.hass.async_create_task(
                 self._async_notify_admin(
+                    self._t("⏳ Redémarrage différé", "⏳ Restart deferred"),
                     self._t("Redémarrage différé : ", "Restart deferred: ")
-                    + " ; ".join(self.reasons)
+                    + " ; ".join(self.reasons),
+                    "mdi:timer-sand",
                 ),
                 eager_start=False,
             )
@@ -300,12 +304,14 @@ class DeferredRestart:
             persistent_notification.async_create(
                 self.hass,
                 f"Le redémarrage différé a échoué : {err}",
-                title="Deferred Restart",
+                title="🚨 Deferred Restart : échec du redémarrage",
                 notification_id=NOTIFICATION_ID,
             )
             await self._async_notify_admin(
+                self._t("🚨 Échec du redémarrage", "🚨 Restart failed"),
                 self._t("Le redémarrage différé a échoué : ", "Deferred restart failed: ")
-                + str(err)
+                + str(err),
+                "mdi:alert-octagon",
             )
 
     # ------------------------------------------------------------- téléphone admin
@@ -314,17 +320,21 @@ class DeferredRestart:
         """Texte des notifications téléphone, selon la langue du serveur."""
         return fr if (self.hass.config.language or "").startswith("fr") else en
 
-    async def _async_notify_admin(self, message: str) -> bool:
+    async def _async_notify_admin(self, title: str, message: str, icon: str) -> bool:
         """Envoie au téléphone admin ; sans cible, ne fait rien (False).
 
+        Pour un service notify.mobile_app_*, `data` ajoute une icône (Android)
+        et un tag : chaque annonce remplace la précédente sur le téléphone.
+        Une entité notify ne reçoit que le titre et le message.
         async_notify_admin ne lève jamais d'exception : un échec d'envoi
         n'empêche jamais un redémarrage.
         """
         return await async_notify_admin(
             self.hass,
             self.entry.data.get(CONF_ADMIN_NOTIFY_TARGET),
-            "Deferred Restart",
+            title,
             message,
+            {"tag": NOTIFICATION_ID, "notification_icon": icon},
         )
 
     @callback
@@ -347,6 +357,6 @@ class DeferredRestart:
             self.hass,
             f"Un redémarrage est en attente, il s'exécutera dès que possible :\n{lines}{limit}\n\n"
             "Actions : `deferred_restart.force_restart` ou `deferred_restart.cancel_pending`.",
-            title="Deferred Restart : redémarrage différé",
+            title="⏳ Deferred Restart : redémarrage différé",
             notification_id=NOTIFICATION_ID,
         )

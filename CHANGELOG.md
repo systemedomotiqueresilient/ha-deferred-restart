@@ -11,7 +11,8 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), ver
   - champ « Téléphone admin » dans le config flow, prérempli via `suggest_admin_target` (une valeur chez les sœurs = préremplie, plusieurs = liste, aucune = services `notify.mobile_app_*` puis entités notify mobiles) ; saisie libre, refusée si elle n'est pas du type `notify.xxx` (`invalid_target`) ;
   - même champ dans l'options flow ; la valeur est stockée dans `entry.data["admin_notify_target"]` (réécrite par `async_update_entry`), les réglages restent dans `entry.options` ;
   - alertes envoyées au téléphone via `async_notify_admin` : redémarrage différé (une fois par report), forcé au délai maximum (envoyé avant le redémarrage), ou en échec. Un échec d'envoi n'empêche jamais un redémarrage. Messages en français si la langue du serveur est le français, en anglais sinon.
-- Tests pytest (`tests/`) : 24 tests, couverture 76 %, dont aucune / une / plusieurs valeurs sœurs, plateforme non listée ignorée, suppression d'une sœur, options flow, migration, envoi, cohérence des versions.
+  - icônes : titres avec émoji (⏳ différé, ⚠️ forcé, 🚨 échec) sur le téléphone et dans les notifications persistantes ; pour un service `notify.mobile_app_*`, `data.notification_icon` (icône MDI, Android) et `data.tag` = `deferred_restart_pending`, pour que chaque annonce remplace la précédente sur le téléphone.
+- Tests pytest (`tests/`) : 25 tests, couverture 77 %, dont aucune / une / plusieurs valeurs sœurs, plateforme non listée ignorée, suppression d'une sœur, options flow, migration, envoi, cohérence des versions.
 - `pyproject.toml` (pytest, couverture, ruff alignés sur `ha-sdr`), `requirements_test.txt` (outils de test uniquement), job « Tests » dans la CI.
 - `VERSION`, `ROADMAP.md`, `CLAUDE.md`.
 
