@@ -4,6 +4,7 @@
       "user": {
         "title": "Deferred Restart",
         "data": {
+          "admin_notify_target": "Admin phone (notification target)",
           "minutes_before": "Protected minutes before a trigger",
           "minutes_after": "Protected minutes after a trigger",
           "max_defer_minutes": "Maximum deferral in minutes (0 = unlimited)",
@@ -11,11 +12,17 @@
           "block_on_any_running": "Also block for any running automation/script",
           "excluded_automations": "Ignored automations",
           "pause_minutes": "Protection pause duration (minutes)"
+        },
+        "data_description": {
+          "admin_notify_target": "Where alerts are sent: a notify service (notify.mobile_app_…) or a notify entity. Pre-filled from your other SDR integrations when they already have one. Leave empty for none."
         }
       }
     },
     "abort": {
       "single_instance_allowed": "Already configured."
+    },
+    "error": {
+      "invalid_target": "Expected a target such as notify.mobile_app_my_phone."
     }
   },
   "options": {
@@ -23,6 +30,7 @@
       "init": {
         "title": "Deferred Restart",
         "data": {
+          "admin_notify_target": "Admin phone (notification target)",
           "minutes_before": "Protected minutes before a trigger",
           "minutes_after": "Protected minutes after a trigger",
           "max_defer_minutes": "Maximum deferral in minutes (0 = unlimited)",
@@ -30,8 +38,14 @@
           "block_on_any_running": "Also block for any running automation/script",
           "excluded_automations": "Ignored automations",
           "pause_minutes": "Protection pause duration (minutes)"
+        },
+        "data_description": {
+          "admin_notify_target": "Where alerts are sent: a notify service (notify.mobile_app_…) or a notify entity. Pre-filled from your other SDR integrations when they already have one. Leave empty for none."
         }
       }
+    },
+    "error": {
+      "invalid_target": "Expected a target such as notify.mobile_app_my_phone."
     }
   },
   "entity": {
@@ -46,6 +60,9 @@
     "sensor": {
       "next_scheduled_trigger": {
         "name": "Next scheduled trigger"
+      },
+      "admin_notify_target": {
+        "name": "Admin phone"
       }
     },
     "switch": {

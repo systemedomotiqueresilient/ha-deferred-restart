@@ -254,7 +254,7 @@ async def async_compute_schedule(
                     whens = _sun_trigger(hass, trig, start)
                 else:
                     whens = await _calendar_trigger(hass, trig, start, end, calendar_cache)
-            except Exception:  # noqa: BLE001 - un trigger exotique ne doit rien casser
+            except Exception:  # un trigger exotique ne doit rien casser
                 _LOGGER.exception("Trigger non analysable dans %s", entity_id)
                 continue
 

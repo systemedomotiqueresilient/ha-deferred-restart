@@ -6,6 +6,8 @@
 
 🇬🇧 English · 🇫🇷 [Français](README.fr.md)
 
+**Version 0.3.0** · [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md)
+
 A Home Assistant integration that **defers** a voluntary restart when it would prevent a
 scheduled or predictable automation from running. The restart is not refused: it is queued
 and runs automatically as soon as the window is clear.
@@ -57,10 +59,29 @@ deliberately ignored.
 - `binary_sensor.deferred_restart_safe_now`: `on` if restarting now would disturb nothing (`reasons` attribute)
 - `binary_sensor.deferred_restart_pending`: a restart is queued (`pending_since`, `deadline`)
 - `sensor.deferred_restart_next_scheduled_trigger`: next predictable trigger within 24 h
+- `sensor.deferred_restart_admin_phone`: admin phone (notification target), diagnostic
 - `switch.deferred_restart_protection`: off = protection paused (development mode).
   It turns itself back on after the pause duration (120 min by default, `resume_at` attribute).
   The pause survives restarts, so you can loop edit → restart → test without re-arming it.
   Turning the switch off also releases a restart that is already queued.
+
+## Admin phone
+
+Deferred Restart can send its alerts to the administrator's phone: a restart was deferred,
+forced after the maximum deferral time, or failed.
+
+- **At installation**, the field is pre-filled when another SDR integration (Sentinel Report,
+  Entity Inventory, Partition Map, Package Keeper) already knows the admin phone. If they disagree,
+  you pick from a list; if none exists, the `notify.mobile_app_*` services and the mobile app notify
+  entities are offered. Leave it empty for no phone alerts.
+- **The value is copied** into this integration: removing the other integration changes nothing.
+- **Change it** in Settings → Devices & services → Deferred Restart → Configure.
+- **`sensor.deferred_restart_admin_phone`** (diagnostic) shows the target, so the other SDR
+  integrations can offer it in turn. Nothing is ever written to another integration.
+- A failed notification never prevents a restart.
+
+The shared code lives in `admin_phone.py`, copied unchanged from the SDR reference
+module (version 1.1.0), shared by all SDR integrations.
 
 ## Actions
 
