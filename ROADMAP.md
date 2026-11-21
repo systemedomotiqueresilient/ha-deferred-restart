@@ -4,11 +4,13 @@
 - 0.1.0 : report des redémarrages autour des déclenchements prévisibles.
 - 0.2.0 : renommage, mode développement, réparations HACS, compatibilité Spook, CI.
 - 0.3.0 : téléphone admin (module commun `admin_phone.py` 1.1.0), tests et couverture.
+- 0.3.1 : module `admin_phone.py` 1.2.0 (Outdoor Brief reconnue comme sœur).
 
 ## Prochaines étapes
 - Tester la 0.3.0 sur une installation réelle : préremplissage depuis Partition Map / Entity Inventory, réception sur le téléphone, vrai Spook.
 - Traduire les notifications persistantes (aujourd'hui en français uniquement) comme les notifications téléphone.
 - Release complète (et non plus pré-release) puis demande d'inclusion dans la liste HACS par défaut.
+- `admin_phone.py` 1.3.0 (reconnaissance ouverte des sœurs : codeowners, marqueur `admin_phone_convention`), en attente du feu vert de Mathieu : utiliser `admin_sensor_attributes` dans le capteur et la nouvelle forme de `find_admin_targets`.
 - Suivre les nouvelles versions du module `admin_phone.py` publiées dans `ha-sdr` (recopie à l'identique, test de SHA-256 à mettre à jour).
 
 ## Idées, non planifiées
